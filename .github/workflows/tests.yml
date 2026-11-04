@@ -1,0 +1,30 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: "Also run the network tests (read CHELSA, compare with healpix-connector)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: prefix-dev/setup-pixi@v0.9.6
+        with:
+          pixi-version: v0.68.1
+          environments: test
+          locked: true
+          cache: true
+      - run: pixi run -e test test
+      - if: ${{ inputs.network }}
+        run: pixi run -e test test-network

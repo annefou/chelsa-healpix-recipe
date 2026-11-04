@@ -1,0 +1,31 @@
+[workspace]
+name = "chelsa-healpix-recipe"
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
+
+[dependencies]
+python = "3.12.*"
+rasterio = ">=1.4"
+healpix-geo = ">=0.4.1"
+
+[pypi-dependencies]
+chelsa-healpix-recipe = { path = ".", editable = true }
+# healpix-convert main at the commit the recipe was tested with (pyramids, override_attrs)
+healpix-convert = { git = "https://github.com/GRID4EARTH/healpix-convert.git", rev = "dfa4ed3" }
+healpix-resample = ">=2026.10.2"
+# the CPU wheel is enough; the CUDA one does not fit on a normal working disk
+torch = { version = ">=2.9.1", index = "https://download.pytorch.org/whl/cpu" }
+
+[feature.test.dependencies]
+pytest = ">=8"
+
+[feature.test.pypi-dependencies]
+# the reference the network tests compare with
+healpix-connector = { git = "https://github.com/annefou/healpix-connector.git", rev = "5a7e671" }
+
+[feature.test.tasks]
+test = "pytest -q"
+test-network = "pytest -q -m network"
+
+[environments]
+test = ["test"]

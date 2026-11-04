@@ -42,18 +42,20 @@ window at 39N 6W): ratio 100.00 to the population standard deviation, and 1.000 
 coefficient of variation. See healpix-connector's
 [`examples/verify_chelsa_scaling.py`](https://github.com/annefou/healpix-connector/blob/main/examples/verify_chelsa_scaling.py).
 
-## Agreement with healpix-connector
+## Agreement with an independent reference
 
 The network tests convert `bio1` over central Iberia (6-3W, 39-42N) and compare the pyramid
-means with [healpix-connector](https://github.com/annefou/healpix-connector)'s binning of the
-same pixels, on cells fully covered by data. Measured 2026-11-04 (healpix-convert `dfa4ed3`):
+means with stored reference values computed independently (an area-weighted binning of the same
+pixels, see [tests/reference](tests/reference/README.md)), on cells fully covered by data.
+This repository does not depend on the code that produced them. Measured 2026-11-04
+(healpix-convert `dfa4ed3`):
 
 | Depth | Cells | Mean difference | Mean abs. difference | Max abs. difference |
 |---|---|---|---|---|
 | 8 (~25 km) | 68 | 0.000 degC | 0.0015 degC | 0.010 degC |
 | 9 (~12 km) | 366 | 0.000 degC | 0.0038 degC | 0.054 degC |
 
-The conversion of the window took about 5 s on a laptop-class CPU.
+The conversion of the window took about 5 s (CPU only).
 
 ## Open points
 
@@ -71,7 +73,7 @@ The conversion of the window took about 5 s on a laptop-class CPU.
 
 ```bash
 pixi run -e test test            # offline: the settings are valid healpix-convert settings
-pixi run -e test test-network    # reads CHELSA and compares with healpix-connector
+pixi run -e test test-network    # reads CHELSA and compares with the stored reference
 ```
 
 ## Licence

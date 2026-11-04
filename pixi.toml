@@ -19,10 +19,6 @@ torch = { version = ">=2.9.1", index = "https://download.pytorch.org/whl/cpu" }
 [feature.test.dependencies]
 pytest = ">=8"
 
-[feature.test.pypi-dependencies]
-# the reference the network tests compare with
-healpix-connector = { git = "https://github.com/annefou/healpix-connector.git", rev = "5a7e671" }
-
 [feature.test.tasks]
 test = "pytest -q"
 test-network = "pytest -q -m network"

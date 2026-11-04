@@ -423,7 +423,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2026e-h5d301ff_0.conda
       - pypi: ./
       - pypi: git+https://github.com/GRID4EARTH/healpix-convert.git?rev=dfa4ed3#dfa4ed3f086ba0a863dd604bdc10f2a5e39dc50a
-      - pypi: git+https://github.com/annefou/healpix-connector.git?rev=5a7e671#5a7e671bbdcb08389968487d2f30ab09568f855c
       - pypi: https://download-r2.pytorch.org/whl/cpu/torch-2.15.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/00/05/76184fe08339723d643ab47887a8e4de8f2921ca4e008617ab7490af7857/filelock-4.2.9-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/02/be/5d2d47b1fb58943194fb59dcf222f7c4e35122ec0ffe8c36e18b5d728f0b/tblib-3.2.2-py3-none-any.whl
@@ -576,7 +575,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hf451053_7.conda
       - pypi: ./
       - pypi: git+https://github.com/GRID4EARTH/healpix-convert.git?rev=dfa4ed3#dfa4ed3f086ba0a863dd604bdc10f2a5e39dc50a
-      - pypi: git+https://github.com/annefou/healpix-connector.git?rev=5a7e671#5a7e671bbdcb08389968487d2f30ab09568f855c
       - pypi: https://download-r2.pytorch.org/whl/cpu/torch-2.11.0-cp312-cp312-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/00/05/76184fe08339723d643ab47887a8e4de8f2921ca4e008617ab7490af7857/filelock-4.2.9-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/02/96/5c48977168f32de067bfafce7f584dd04becf152152bf088636cc034828e/shapely-2.2.0-cp312-cp312-macosx_11_0_arm64.whl
@@ -3410,21 +3408,6 @@ packages:
   - polytope-client ; extra == 'climatedt'
   - cdsapi ; extra == 'era5'
   - cfgrib ; extra == 'era5'
-  requires_python: '>=3.11'
-- pypi: git+https://github.com/annefou/healpix-connector.git?rev=5a7e671#5a7e671bbdcb08389968487d2f30ab09568f855c
-  name: healpix-connector
-  version: 0.2.0
-  requires_dist:
-  - healpix-geo>=0.4.1
-  - numpy>=1.26
-  - requests>=2.31 ; extra == 'biodiversity'
-  - pandas>=2.1 ; extra == 'biodiversity'
-  - healpix-resample>=2026.7.0 ; extra == 'convert'
-  - rioxarray>=0.15 ; extra == 'convert'
-  - xarray>=2024.1 ; extra == 'convert'
-  - zarr>=2.17 ; extra == 'convert'
-  - mcp>=1.2 ; extra == 'mcp'
-  - pytest>=8 ; extra == 'test'
   requires_python: '>=3.11'
 - pypi: https://download-r2.pytorch.org/whl/cpu/torch-2.11.0-cp312-cp312-macosx_11_0_arm64.whl
   name: torch

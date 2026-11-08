@@ -10,7 +10,10 @@
 
 ## What a recipe is here
 
-Nothing is added to healpix-convert. A recipe is:
+Nothing is added to healpix-convert. The shared code (reading, staging, settings, BIOCLIM
+conventions) comes from [healpix-recipe-tools](https://github.com/annefou/healpix-recipe-tools);
+this repository holds only what is specific to CHELSA, following the
+[recipe contract](https://github.com/annefou/healpix-recipe-template/blob/main/CONTRACT.md). A recipe is:
 
 1. **a staging step**: CHELSA's GeoTIFFs are read with rasterio (the file's own scale and offset
    applied) and written as a lat/lon Zarr dataset with a STAC item, which is what

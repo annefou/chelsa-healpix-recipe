@@ -6,8 +6,8 @@ healpix-convert itself. The layout is a trial, discussed in
 https://github.com/GRID4EARTH/healpix-convert/issues/18.
 """
 
-from chelsa_healpix_recipe.conventions import CONVENTIONS
-from chelsa_healpix_recipe.recipe import SOURCE, VARIABLES, convert, settings, stage
+from healpix_recipe_tools.bioclim import CONVENTIONS
+from chelsa_healpix_recipe.recipe import SOURCE_CONVENTION, SOURCE, VARIABLES, convert, settings, stage
 
 __version__ = "0.1.0.dev0"
-__all__ = ["CONVENTIONS", "SOURCE", "VARIABLES", "convert", "settings", "stage"]
+__all__ = ["CONVENTIONS", "SOURCE_CONVENTION", "SOURCE", "VARIABLES", "convert", "settings", "stage"]

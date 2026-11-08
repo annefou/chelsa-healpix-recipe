@@ -10,7 +10,7 @@ readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.11"
 authors = [{ name = "Anne Fouilloux", email = "anne.fouilloux@lifewatch.eu" }]
-dependencies = ["healpix-convert", "rasterio>=1.4", "shapely>=2.1", "xarray>=2025.11", "zarr>=3.1.3"]
+dependencies = ["healpix-convert", "healpix-recipe-tools", "rasterio>=1.4", "shapely>=2.1", "xarray>=2025.11", "zarr>=3.1.3"]
 
 [project.urls]
 Repository = "https://github.com/annefou/chelsa-healpix-recipe"

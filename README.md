@@ -76,6 +76,21 @@ convert("bio15", bbox, "bio15.zarr", convention="dismo")    # also reads bio12 (
 
 The output states its convention (`bioclim_convention`) and, when converted, how (`comment`).
 
+## Coasts: CHELSA has values over the sea
+
+CHELSA v2.1 declares no nodata value and holds plausible-looking values over the sea, even in the
+open ocean (`bio1` 17.0-17.5 degC at 30-29W 40-41N), although its stated domain is the earth's land
+surface. A coastal HEALPix cell then averages land and sea. By default the recipe keeps land pixels
+only, using a land mask **you choose** (`land_mask=`, see
+[healpix-recipe-tools](https://github.com/annefou/healpix-recipe-tools#coasts-and-land-masks)):
+Natural Earth 10 m land by default, any polygon file or URL (OpenStreetMap land polygons, GSHHG, a
+national coastline), or `None` for the source's values. The output records the mask and its licence.
+
+Effect on the Gulf of Cadiz / Donana window (7-6W, 36.5-37.5N), `bio4`, depth 8: 13 of 40 cells are
+all sea and disappear; 8 of the 27 land cells change, the temperature standard deviation rising by a
+median of 0.29 degC and up to 0.86 degC (land value about 5.9 degC), since the sea's smaller
+seasonality was averaged in. Measured 2026-11-08.
+
 ## Agreement with an independent reference
 
 The network tests convert `bio1` over central Iberia (6-3W, 39-42N) and compare the pyramid
@@ -98,9 +113,6 @@ The conversion of the window took about 5 s (CPU only).
   only part of its area, with nothing saying so. A coverage fraction, and the spread within each
   cell, would need reductions beyond `mean` in healpix-convert (or
   [healpix-resample#63](https://github.com/GRID4EARTH/healpix-resample/issues/63)).
-- **CHELSA declares no nodata value.** How areas without data (ocean, gaps) are encoded is still
-  to be checked; if they hold a number, the conversion averages it in. The trial window is
-  inland, so it did not show.
 - **The staged STAC item needs `stac_extensions`**; healpix-convert fails without it.
 
 ## Running

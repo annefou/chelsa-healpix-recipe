@@ -22,3 +22,10 @@ def test_every_convention_gives_valid_settings_that_state_it(variable, conventio
     expected = SOURCE_CONVENTION if convention == "as-published" else convention
     assert attrs["bioclim_convention"] == expected
     assert hc.ConvertSettings.model_validate(s) is not None
+
+
+def test_the_land_mask_is_recorded_and_can_be_switched_off():
+    attrs = next(iter(settings("bio1")["group_settings"].values()))["metadata"]["override_attrs"]["bio1"]
+    assert "Natural Earth" in attrs["land_mask"] and attrs["land_mask_license"] == "public domain"
+    attrs = next(iter(settings("bio1", land_mask=None)["group_settings"].values()))["metadata"]["override_attrs"]["bio1"]
+    assert attrs["land_mask"].startswith("none")

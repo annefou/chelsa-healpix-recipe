@@ -13,7 +13,7 @@ chelsa-healpix-recipe = { path = ".", editable = true }
 # healpix-convert main at the commit the recipe was tested with (pyramids, override_attrs)
 healpix-convert = { git = "https://github.com/GRID4EARTH/healpix-convert.git", rev = "dfa4ed3" }
 # shared building blocks of the recipes (staging, settings, BIOCLIM conventions)
-healpix-recipe-tools = { git = "https://github.com/annefou/healpix-recipe-tools.git", rev = "9216ab2" }
+healpix-recipe-tools = { git = "https://github.com/annefou/healpix-recipe-tools.git", rev = "5baf58a" }
 healpix-resample = ">=2026.10.2"
 # the CPU wheel is enough; the CUDA one does not fit on a normal working disk
 torch = { version = ">=2.9.1", index = "https://download.pytorch.org/whl/cpu" }

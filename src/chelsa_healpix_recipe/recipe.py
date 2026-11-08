@@ -7,6 +7,8 @@ from pathlib import Path
 
 import numpy as np
 
+from chelsa_healpix_recipe import conventions
+
 #: The source, as cited. CHELSA v2.1 climatologies, 30 arc-seconds, EPSG:4326.
 SOURCE = {
     "name": "CHELSA v2.1 climatologies",
@@ -46,14 +48,15 @@ VARIABLES = {
 _WGS84 = {"name": "wgs84"}
 
 
-def settings(variable: str, depth: int = 13, pyramid_to: int = 8, chunk_depth: int = 7) -> dict:
+def settings(variable: str, depth: int = 13, pyramid_to: int = 8, chunk_depth: int = 7,
+             convention: str = "as-published") -> dict:
     """healpix-convert settings for one variable, as plain data.
 
     CHELSA (about 1 km) is resampled bilinearly at ``depth`` (13 is about 800 m), then the
     pyramid builds the coarser depths down to ``pyramid_to`` with ``mean``: on equal-area
     cells, block means are area-weighted cell means.
     """
-    meta = VARIABLES[variable]
+    meta = {**VARIABLES[variable], **conventions.attrs(variable, convention)}
     return {
         "metadata": {
             "stac": {"override_properties": {"license": SOURCE["license"]}},
@@ -103,12 +106,17 @@ def _read_window(url: str, bbox: tuple[float, float, float, float], pad_deg: flo
 
 
 def stage(variable: str, bbox: tuple[float, float, float, float], path: str | Path,
-          pad_deg: float = 0.5) -> Path:
+          pad_deg: float = 0.5, convention: str = "as-published") -> Path:
     """Write the staged input healpix-convert reads: a lat/lon Zarr dataset with a STAC item."""
     import shapely
     import xarray as xr
 
+    conventions.check(variable, convention)
     values, lon, lat = _read_window(SOURCE["url_template"].format(name=variable), bbox, pad_deg)
+    bio12 = None
+    if conventions.needs_bio12(variable, convention):
+        bio12, _, _ = _read_window(SOURCE["url_template"].format(name="bio12"), bbox, pad_deg)
+    values = conventions.apply(variable, values, convention, bio12=bio12)
     ds = xr.Dataset({variable: (("lat", "lon"), values.astype("float32"))}, coords={"lat": lat, "lon": lon})
     ds["lat"].attrs.update(standard_name="latitude", units="degrees_north")
     ds["lon"].attrs.update(standard_name="longitude", units="degrees_east")
@@ -118,7 +126,7 @@ def stage(variable: str, bbox: tuple[float, float, float, float], path: str | Pa
         "stac_version": "1.1.0",
         # healpix-convert requires the field; the DEM GLO-30 notebook uses the projection extension
         "stac_extensions": ["https://stac-extensions.github.io/projection/v2.0.0/schema.json"],
-        "id": f"chelsa-v21-{variable}",
+        "id": f"chelsa-v21-{variable}-{conventions.target(convention)}",
         "geometry": shapely.geometry.mapping(box),
         "bbox": list(box.bounds),
         "properties": {
@@ -137,13 +145,13 @@ def stage(variable: str, bbox: tuple[float, float, float, float], path: str | Pa
 
 
 def convert(variable: str, bbox: tuple[float, float, float, float], output: str | Path,
-            staged: str | Path | None = None, **settings_kwargs):
+            staged: str | Path | None = None, convention: str = "as-published", **settings_kwargs):
     """Stage, then convert with healpix-convert's public API. Returns the output DataTree."""
     import healpix_convert as hc
     import shapely
 
     output = Path(output)
     staged = Path(staged) if staged else output.with_name(output.stem + "-staged.zarr")
-    stage(variable, bbox, staged)
-    cfg = hc.ConvertSettings.model_validate(settings(variable, **settings_kwargs))
+    stage(variable, bbox, staged, convention=convention)
+    cfg = hc.ConvertSettings.model_validate(settings(variable, convention=convention, **settings_kwargs))
     return hc.create_healpix_dataset([str(staged)], cfg, str(output), output_extent=shapely.box(*bbox))
